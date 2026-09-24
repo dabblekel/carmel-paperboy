@@ -1,0 +1,240 @@
+:root {
+  --paper: #fbf6ec;
+  --paper-edge: rgba(74, 58, 40, 0.14);
+  --ink: #3b3024;
+  --ink-soft: #7a6a57;
+  --accent: #c8553d;
+  --accent-ink: #fffaf2;
+  --shadow: 0 6px 22px rgba(38, 50, 70, 0.18);
+  --radius: 14px;
+  font-family: ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #7ea8d2; }
+
+#stage { position: fixed; inset: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+
+.panel {
+  position: fixed;
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+
+.view-bar {
+  top: 16px; right: 16px; left: auto;
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end;
+  padding: 8px; max-width: min(640px, calc(100vw - 32px));
+}
+.chips { display: contents; }
+
+.chip {
+  font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--ink); background: #fff;
+  border: 1px solid var(--paper-edge); border-radius: 999px;
+  padding: 7px 12px; cursor: pointer;
+  transition: background 120ms, transform 120ms;
+}
+.chip:hover { background: #f3ead9; }
+.chip:active { transform: translateY(1px); }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip-strong { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.chip-strong:hover { background: #b24832; }
+
+.walk-bar {
+  position: fixed; left: 16px; bottom: 14px; right: 130px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; pointer-events: none;
+}
+.walk-bar[hidden] { display: none; }
+.look-ahead {
+  pointer-events: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  font: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink);
+  background: rgba(251, 246, 236, 0.9); border: 1px solid var(--paper-edge); border-radius: 999px;
+  padding: 6px 12px 6px 9px; cursor: pointer; box-shadow: 0 3px 10px rgba(38, 50, 70, 0.14);
+}
+.look-ahead svg { width: 15px; height: 15px; }
+.look-ahead:hover { background: #fff; }
+.look-ahead:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.view-bar[hidden] { display: none; }
+.hint {
+  margin: 0;
+  font-size: 12px; color: rgba(59, 48, 36, 0.78);
+  text-shadow: 0 0 3px rgba(255, 250, 240, 0.95), 0 0 9px rgba(255, 250, 240, 0.7);
+  pointer-events: none;
+}
+
+.overlay { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(126, 168, 210, 0.55); }
+.overlay[hidden] { display: none; }
+.card { position: relative; width: min(420px, calc(100vw - 32px)); padding: 20px 22px; }
+.card h2 { margin: 0 0 6px; font-size: 18px; }
+.card p { margin: 0 0 14px; line-height: 1.45; }
+#loading-text { margin: 0 0 10px; font-weight: 600; }
+.track { height: 8px; border-radius: 999px; background: #eadfcb; overflow: hidden; }
+#loading-bar { height: 100%; width: 0; background: var(--accent); border-radius: inherit; transition: width 150ms; }
+#loading-bar.indeterminate { width: 35% !important; animation: slide 1.1s ease-in-out infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+
+.debug {
+  left: 16px; top: 16px; margin: 0; padding: 8px 12px; max-width: min(560px, calc(100vw - 32px));
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap;
+}
+
+body.capture .panel:not(.card), body.capture .overlay { display: none !important; }
+
+@media (max-width: 640px) {
+  .view-bar { top: auto; bottom: 56px; right: 16px; left: 16px; justify-content: flex-start; max-width: none; }
+  .hint { display: none; }
+  .walk-bar { right: 110px; }
+}
+
+/* Hover tooltip: small, beside the cursor. Positioned with transform from script. */
+.tooltip {
+  position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none;
+  max-width: 240px; padding: 8px 11px 9px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--paper-edge); border-radius: 10px; box-shadow: var(--shadow);
+  display: grid; gap: 2px; font-size: 12.5px; line-height: 1.35;
+}
+.tooltip[hidden], .place-card[hidden], .speech-bubble[hidden], .map-panel[hidden], .map-fold[hidden] { display: none; }
+.tip-title { font-size: 13.5px; }
+.tip-text { color: var(--ink-soft); }
+
+/* Pinned card: larger, follows its building, closes with × or Escape. */
+.place-card {
+  position: fixed; left: 0; top: 0; z-index: 21;
+  width: min(324px, calc(100vw - 32px)); max-height: calc(100vh - 24px); overflow-y: auto;
+  padding: 17px 20px 14px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--paper-edge); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.letter-kicker { margin-bottom: 7px; color: var(--ink-soft); font-size: 10px; font-weight: 750; letter-spacing: 0.14em; text-transform: uppercase; }
+.place-card h2 { margin: 0 26px 10px 0; font: 600 21px/1.15 ui-serif, Georgia, serif; text-wrap: balance; }
+.letter-copy { padding-top: 10px; border-top: 1px solid #d9ccb7; font: 14px/1.55 ui-serif, Georgia, serif; }
+.letter-copy p { margin: 0 0 10px; text-indent: 0.85em; }
+.letter-copy p:last-child { margin-bottom: 0; }
+.letter-footer { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-top: 11px; }
+.letter-rule { width: 60%; height: 1px; margin-bottom: 13px; background: #d9ccb7; transform: rotate(-2deg); }
+.letter-icon { display: block; width: 47px; height: 47px; color: #8a654e; transform: rotate(-5deg); }
+.letter-icon svg { display: block; width: 100%; height: 100%; }
+.letter-icon .icon-accent { stroke: var(--accent); }
+.place-card.auto { pointer-events: none; animation: card-in 240ms ease-out; }
+.place-card.auto.has-action { pointer-events: auto; }
+.place-card.auto .close { display: none; }
+.place-card.auto h2 { margin-right: 0; }
+@keyframes card-in { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .place-card.auto { animation: none; } }
+.phone-enter {
+  display: block; width: 100%; margin-top: 9px; padding: 9px 12px;
+  border: 1px solid #aa664e; border-radius: 999px; background: #bd654b; color: #fffaf2;
+  font: 700 13px/1.2 ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+  cursor: pointer; box-shadow: 0 2px 5px rgba(86, 48, 34, 0.16);
+}
+.phone-enter:hover { background: #a8503b; }
+.phone-enter:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.phone-enter[hidden] { display: none; }
+
+/* Short walk-up conversation, anchored above each character. */
+.speech-bubble {
+  position: fixed; left: 0; top: 0; z-index: 19; pointer-events: none;
+  width: max-content; max-width: min(245px, calc(100vw - 24px));
+  padding: 9px 12px; border: 1px solid var(--paper-edge); border-radius: 13px;
+  background: var(--paper); color: var(--ink); box-shadow: var(--shadow);
+  font-size: 13px; line-height: 1.35; font-weight: 500;
+}
+.speech-bubble::after {
+  content: ''; position: absolute; bottom: -7px; left: 20px;
+  width: 12px; height: 12px; background: inherit;
+  border-right: 1px solid var(--paper-edge); border-bottom: 1px solid var(--paper-edge);
+  transform: rotate(45deg);
+}
+.speech-bubble-reply { max-width: min(190px, calc(100vw - 24px)); background: #fff2d4; }
+.speech-bubble-reply::after { left: calc(50% - 6px); }
+.speech-bubble-greeting { max-width: min(205px, calc(100vw - 24px)); }
+.speech-bubble p { margin: 0; }
+.speech-bubble p + p { margin-top: 7px; }
+
+.polling-overlay {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+  padding: 24px; background: #fbf6ec; color: var(--ink); text-align: center;
+  cursor: pointer;
+}
+.polling-overlay[hidden] { display: none; }
+.polling-overlay p { margin: 0; font: 600 clamp(22px, 5vw, 34px)/1.25 ui-serif, Georgia, serif; }
+.close {
+  position: absolute; top: 8px; right: 8px; width: 28px; height: 28px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink-soft);
+  font: 600 20px/1 system-ui, sans-serif; cursor: pointer;
+}
+.close:hover { background: #f0e6d3; color: var(--ink); }
+.close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Route map: a folded paper map in the corner that opens into the illustrated route. */
+.map-fold {
+  position: fixed; right: 18px; bottom: 16px; z-index: 5;
+  width: 92px; height: 77px; padding: 0; border: 0; background: none; cursor: pointer;
+  filter: drop-shadow(0 4px 8px rgba(38, 50, 70, 0.28));
+  transform: rotate(-4deg); transition: transform 160ms ease;
+}
+.map-fold svg { width: 100%; height: 100%; display: block; }
+.map-fold:hover { transform: rotate(-1deg) translateY(-3px) scale(1.04); }
+.map-fold:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.map-panel {
+  right: 16px; bottom: 16px; z-index: 5;
+  width: min(356px, calc(100vw - 32px)); padding: 12px 14px 14px;
+  transform-origin: bottom right; animation: unfold 220ms ease-out;
+}
+.map-panel header { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 4px; }
+.map-panel h2 {
+  margin: 0; font-size: 13.5px; font-weight: 700; color: var(--ink);
+}
+.map-panel .close { position: static; }
+#map-route svg { display: block; width: 100%; height: auto; max-height: calc(100vh - 150px); }
+@keyframes unfold { from { opacity: 0; transform: scale(0.35) rotate(-4deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .map-panel { animation: none; } .map-fold { transition: none; } }
+
+body.capture .tooltip, body.capture .place-card, body.capture .speech-bubble, body.capture .map-fold, body.capture .walk-bar { display: none !important; }
+
+@media (max-width: 640px) {
+}
+
+/* Visited stops: a yellow star stamp lands on the map icon once its card has been read. */
+.map-panel .stamp { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.map-panel .stop.stamped .stamp { opacity: 1; }
+.map-panel .stop.stamped.fresh .stamp { animation: stamp-in 420ms cubic-bezier(.2, .9, .3, 1.2); }
+@keyframes stamp-in { from { opacity: 0; scale: 1.6; } 60% { opacity: 1; } to { opacity: 1; scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .map-panel .stop.stamped.fresh .stamp { animation: none; } }
+
+/* The first screen: the route map opened across the whole page. Closing it folds it away into
+   the corner; opening it again later uses the small corner panel. */
+.map-panel.full {
+  inset: 0; margin: auto; width: min(480px, calc(100vw - 32px)); height: fit-content; max-height: calc(100vh - 32px);
+  z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 18px 20px 20px; overflow: auto;
+  /* the world stays visible around it, slightly dimmed */
+  box-shadow: 0 18px 48px rgba(30, 38, 52, 0.32), 0 0 0 100vmax rgba(30, 38, 52, 0.22);
+  transform-origin: center; animation: map-pop 260ms ease-out;
+}
+.map-panel.full header { align-self: stretch; justify-content: center; position: relative; padding: 4px 36px 0; }
+.map-panel.full h2 { font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); text-align: center; }
+.map-panel.full .close { position: absolute; top: -6px; right: -8px; }
+.map-panel.full #map-route { width: 100%; }
+.map-panel.full #map-route svg { max-height: calc(100vh - 190px); margin: 0 auto; }
+.map-start { display: none; }
+.map-panel.full .map-start {
+  display: inline-block; margin-top: 4px; padding: 10px 22px;
+  border: 0; border-radius: 999px; background: var(--accent); color: var(--accent-ink);
+  font: 650 15px/1.2 ui-rounded, 'SF Pro Rounded', system-ui, sans-serif; cursor: pointer;
+  box-shadow: 0 3px 10px rgba(120, 50, 30, 0.25); transition: transform 120ms;
+}
+.map-panel.full .map-start:hover { transform: translateY(-1px); }
+.map-panel.full .map-start:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.map-panel.folding { animation: fold-away 380ms ease-in forwards; transform-origin: 100% 100%; }
+@keyframes map-pop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+@keyframes fold-away { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(0.08) rotate(-4deg); } }
+@media (prefers-reduced-motion: reduce) { .map-panel.full, .map-panel.folding { animation: none; } }

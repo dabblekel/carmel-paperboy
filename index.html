@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playable Worlds</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main id="stage" aria-label="3D world view"></main>
+
+    <nav class="panel view-bar" id="view-bar" aria-label="Camera views" hidden>
+      <div id="views" class="chips"></div>
+      <button id="reset" type="button" class="chip chip-strong" title="Return to the starting view (Home key)">Reset view</button>
+    </nav>
+
+    <div class="walk-bar" id="walk-bar" hidden>
+      <button id="look-ahead" type="button" class="look-ahead" title="Swing the camera behind the paperboy (Space)">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 6.5A6.5 6.5 0 1 0 16.5 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M16.8 2.8v4.4h-4.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Look ahead
+      </button>
+      <p class="hint" id="hint">Arrow keys or WASD to walk · Shift to run · move the mouse to look around · Space to look ahead · R to restart</p>
+    </div>
+
+    <section id="loading" class="overlay" aria-live="polite">
+      <div class="panel card">
+        <p id="loading-text">Loading…</p>
+        <div class="track"><div id="loading-bar"></div></div>
+      </div>
+    </section>
+
+    <section id="error" class="overlay" role="alert" hidden>
+      <div class="panel card">
+        <h2>The world couldn't load</h2>
+        <p id="error-text"></p>
+        <button id="retry" type="button" class="chip chip-strong">Try again</button>
+      </div>
+    </section>
+
+    <div id="tooltip" class="tooltip" role="tooltip" hidden>
+      <strong class="tip-title"></strong>
+      <span class="tip-text"></span>
+    </div>
+
+    <aside id="place-card" class="place-card" aria-live="polite" hidden>
+      <button id="place-card-close" type="button" class="close" aria-label="Close">×</button>
+      <div class="letter-kicker">A note from your route</div>
+      <h2></h2>
+      <div class="letter-copy"></div>
+      <div class="letter-footer">
+        <span class="letter-rule" aria-hidden="true"></span>
+        <span id="letter-icon" class="letter-icon" aria-hidden="true"></span>
+      </div>
+      <button id="enter-phone-booth" type="button" class="phone-enter" hidden>enter phone booth?</button>
+    </aside>
+    <div id="conversation-npc" class="speech-bubble speech-bubble-npc" role="status" hidden></div>
+    <div id="conversation-reply" class="speech-bubble speech-bubble-reply" role="status" hidden></div>
+    <div id="greeting-bubble" class="speech-bubble speech-bubble-greeting" role="status" hidden></div>
+    <button id="map-fold" type="button" class="map-fold" aria-controls="map" aria-expanded="false" title="Open the route map" hidden></button>
+
+    <section id="map" class="panel map-panel" aria-labelledby="map-title" hidden>
+      <header>
+        <h2 id="map-title">Route</h2>
+        <button id="map-close" type="button" class="close" aria-label="Fold the map">×</button>
+      </header>
+      <div id="map-route"></div>
+      <button id="map-start" type="button" class="map-start" hidden>Start the route</button>
+    </section>
+
+    <section id="polling-loading" class="polling-overlay" role="dialog" aria-modal="true" aria-label="Polling booth loading. Press Escape or click to return." tabindex="-1" hidden>
+      <p>Polling Booth Loading....</p>
+    </section>
+
+    <pre id="debug" class="panel debug" hidden></pre>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

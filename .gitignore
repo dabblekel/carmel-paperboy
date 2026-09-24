@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.DS_Store
+docs/step3/
+docs/step4/
+docs/visual-baseline/*.png

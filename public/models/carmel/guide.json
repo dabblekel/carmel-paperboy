@@ -1,0 +1,51 @@
+{
+  "tooltips": [
+    "wallys",
+    "city_hall",
+    "post_office",
+    "maple_cafe",
+    "grocer",
+    "florist",
+    "phone_booth"
+  ],
+  "route": [
+    "start",
+    "wallys",
+    "city_hall",
+    "post_office",
+    "maple_cafe",
+    "phone_booth"
+  ],
+  "startLabel": "Start",
+  "icons": {
+    "start": "home",
+    "wallys": "shop",
+    "city_hall": "hall",
+    "post_office": "post",
+    "maple_cafe": "coffee",
+    "phone_booth": "phone"
+  },
+  "map": {
+    "title": "Your Paper Route - September 2026"
+  },
+  "doorRange": {
+    "wallys": { "open": 1.4, "keep": 1.8, "across": 0.6 }
+  },
+  "conversation": {
+    "after": "wallys",
+    "npcNode": "V2 • Resident 02",
+    "npcText": [
+      "Hi, are you on the paper route too? Nice to meet you!",
+      "my favorite ice cream flavor is vanilla"
+    ],
+    "replyText": [
+      "Nice to meet you!",
+      "Mine's mint chip!"
+    ]
+  },
+  "greetings": [
+    { "npcNode": "V2 • Resident 01", "text": "Hi!" },
+    { "npcNode": "V2 • Resident 03", "text": "Hi!" },
+    { "npcNode": "V2 • Resident 04", "text": "What drink should I get?" }
+  ]
+}

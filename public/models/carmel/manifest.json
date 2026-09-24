@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "id": "carmel",
+  "title": "Carmel",
+  "asset": "world.glb",
+  "coordinateSystem": {
+    "up": "+Y",
+    "units": "meters",
+    "blenderToGltf": "(x, y, z) -> (x, z, -y)",
+    "entityBoundsExtras": "source_bounds_min/max are Blender entity-local; convert (x,y,z)->(x,z,-y) and reorder min/max before use"
+  },
+  "movement": {
+    "type": "spherical",
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "nominalRadius": 23,
+    "groundRole": "ground",
+    "obstacleRole": "solid",
+    "passableRole": "none"
+  },
+  "spawn": {
+    "node": "spawn_courier",
+    "position": [
+      -22.922,
+      3.362,
+      -0.204
+    ],
+    "rotation": [
+      -0.338613,
+      0.386122,
+      0.559272,
+      0.650743
+    ],
+    "forward": [
+      0.12378,
+      0.87259,
+      0.4725
+    ],
+    "up": [
+      -0.98938,
+      0.14511,
+      -0.00881
+    ]
+  },
+  "character": {
+    "node": "Courier",
+    "rig": "Courier_Rig",
+    "localUp": [
+      0,
+      1,
+      0
+    ],
+    "localForward": [
+      0,
+      0,
+      1
+    ],
+    "clips": [
+      {
+        "name": "Idle",
+        "durationSeconds": 2.0,
+        "inPlace": true,
+        "loop": true
+      },
+      {
+        "name": "Walk",
+        "durationSeconds": 0.8,
+        "inPlace": true,
+        "loop": true
+      }
+    ],
+    "walkStrideMeters": 1.3,
+    "walkClipSpeedMetersPerSecond": 1.625
+  },
+  "camera": {
+    "followDistance": 10,
+    "height": 13,
+    "targetHeight": 1.15,
+    "lookAhead": 0.65
+  },
+  "lighting": {
+    "preset": "sunny_warm",
+    "skyColorLinear": [
+      0.075,
+      0.34,
+      0.95
+    ],
+    "skyStrength": 0.9,
+    "ambientColorLinear": [
+      0.78,
+      0.84,
+      0.92
+    ],
+    "ambientStrength": 0.35,
+    "sunColorLinear": [
+      1,
+      0.82,
+      0.59
+    ],
+    "sourceSunEnergy": 1.9,
+    "sourceExposure": 0.55,
+    "sunDirection": [
+      0.44113,
+      -0.73521,
+      -0.51465
+    ],
+    "note": "Reference values only; the viewer recreates and visually matches this look."
+  },
+  "landmarks": [
+    {
+      "id": "wallys",
+      "label": "Wally's",
+      "node": "V2 \u2022 Second Sun Vintage",
+      "targetNode": "target_wallys",
+      "position": [
+        -1.63482,
+        20.39166,
+        10.65018
+      ],
+      "up": [
+        -0.07088,
+        0.88416,
+        0.46178
+      ]
+    },
+    {
+      "id": "phone_booth",
+      "label": "Telephone booth",
+      "node": "Carmel \u2022 Shore telephone booth",
+      "targetNode": "target_phone_booth",
+      "position": [
+        13.70436,
+        11.51927,
+        -14.89295
+      ],
+      "up": [
+        0.58849,
+        0.49466,
+        -0.63953
+      ]
+    },
+    {
+      "id": "post_office",
+      "label": "Post office",
+      "node": "V2 \u2022 Post Office",
+      "targetNode": "target_post_office",
+      "position": [
+        -7.41995,
+        21.88025,
+        -0.65583
+      ],
+      "up": [
+        -0.32102,
+        0.94665,
+        -0.02837
+      ]
+    },
+    {
+      "id": "city_hall",
+      "label": "City hall",
+      "node": "V2 \u2022 City Hall",
+      "targetNode": "target_city_hall",
+      "position": [
+        -2.53313,
+        22.93546,
+        -1.2704
+      ],
+      "up": [
+        -0.10961,
+        0.99245,
+        -0.05497
+      ]
+    },
+    {
+      "id": "maple_cafe",
+      "label": "Maple Cafe",
+      "node": "V2 \u2022 Maple Cafe",
+      "targetNode": "target_maple_cafe",
+      "position": [
+        -7.67481,
+        19.21523,
+        10.51045
+      ],
+      "up": [
+        -0.3307,
+        0.82797,
+        0.45289
+      ]
+    },
+    {
+      "id": "grocer",
+      "label": "Carmel Grocer",
+      "node": "V2 \u2022 Grocer",
+      "targetNode": "target_grocer",
+      "position": [
+        3.90838,
+        22.76856,
+        0.46209
+      ],
+      "up": [
+        0.16915,
+        0.98539,
+        0.02
+      ]
+    },
+    {
+      "id": "florist",
+      "label": "Florist",
+      "node": "V2 \u2022 Florist workshop",
+      "targetNode": "target_florist",
+      "position": [
+        4.56739,
+        20.42484,
+        9.8531
+      ],
+      "up": [
+        0.19744,
+        0.88294,
+        0.42594
+      ]
+    },
+    {
+      "id": "cottage_01",
+      "label": "Cottage 01",
+      "node": "V2 \u2022 Acorn home 01",
+      "targetNode": "target_cottage_01",
+      "position": [
+        -22.5593,
+        -2.93107,
+        -3.90501
+      ],
+      "up": [
+        -0.97737,
+        -0.12699,
+        -0.16918
+      ]
+    },
+    {
+      "id": "cottage_02",
+      "label": "Cottage 02",
+      "node": "V2 \u2022 Acorn home 02",
+      "targetNode": "target_cottage_02",
+      "position": [
+        -22.43201,
+        3.17938,
+        -4.35724
+      ],
+      "up": [
+        -0.97229,
+        0.13781,
+        -0.18886
+      ]
+    },
+    {
+      "id": "cottage_03",
+      "label": "Cottage 03",
+      "node": "V2 \u2022 Acorn home 03",
+      "targetNode": "target_cottage_03",
+      "position": [
+        -20.81208,
+        9.31399,
+        -4.38512
+      ],
+      "up": [
+        -0.89634,
+        0.40114,
+        -0.18886
+      ]
+    },
+    {
+      "id": "cottage_04",
+      "label": "Cottage 04",
+      "node": "V2 \u2022 Acorn home 04",
+      "targetNode": "target_cottage_04",
+      "position": [
+        -22.59936,
+        0.19917,
+        5.98049
+      ],
+      "up": [
+        -0.96669,
+        0.00852,
+        0.25582
+      ]
+    },
+    {
+      "id": "cottage_05",
+      "label": "Cottage 05",
+      "node": "V2 \u2022 Acorn home 05",
+      "targetNode": "target_cottage_05",
+      "position": [
+        -22.47992,
+        3.41582,
+        4.37296
+      ],
+      "up": [
+        -0.97086,
+        0.14752,
+        0.18886
+      ]
+    },
+    {
+      "id": "cottage_06",
+      "label": "Cottage 06",
+      "node": "V2 \u2022 Acorn home 06",
+      "targetNode": "target_cottage_06",
+      "position": [
+        -20.61577,
+        8.73557,
+        5.71715
+      ],
+      "up": [
+        -0.89213,
+        0.37802,
+        0.2474
+      ]
+    },
+    {
+      "id": "cottage_07",
+      "label": "Cottage 07",
+      "node": "V2 \u2022 Acorn home 07",
+      "targetNode": "target_cottage_07",
+      "position": [
+        -21.86779,
+        -7.71586,
+        0.0
+      ],
+      "up": [
+        -0.94302,
+        -0.33274,
+        0.0
+      ]
+    },
+    {
+      "id": "cottage_08",
+      "label": "Cottage 08",
+      "node": "V2 \u2022 Acorn home 08",
+      "targetNode": "target_cottage_08",
+      "position": [
+        -20.50488,
+        4.60244,
+        -9.63795
+      ],
+      "up": [
+        -0.8869,
+        0.19907,
+        -0.41687
+      ]
+    }
+  ],
+  "viewpoints": [
+    {
+      "id": "civic_landmarks",
+      "label": "Civic landmarks",
+      "sourceCamera": "Carmel \u2022 01 Civic landmarks",
+      "position": [
+        2.1935,
+        29.9673,
+        7.1089
+      ],
+      "target": [
+        -2.0105,
+        25.6774,
+        -0.107
+      ],
+      "up": [
+        -0.2916,
+        0.8872,
+        -0.3576
+      ],
+      "fovDegrees": 39.598,
+      "projection": "orthographic",
+      "orthoScale": 16.0
+    },
+    {
+      "id": "vintage_and_village_shops",
+      "label": "Vintage and village shops",
+      "sourceCamera": "Carmel \u2022 02 Vintage and village shops",
+      "position": [
+        -4.0669,
+        27.1761,
+        7.4648
+      ],
+      "target": [
+        -2.3868,
+        23.7957,
+        10.7206
+      ],
+      "up": [
+        0.0397,
+        0.7033,
+        0.7098
+      ],
+      "fovDegrees": 39.598,
+      "projection": "orthographic",
+      "orthoScale": 10.5
+    },
+    {
+      "id": "sunny_beach",
+      "label": "Sunny beach",
+      "sourceCamera": "Carmel \u2022 03 Sunny beach",
+      "position": [
+        21.3569,
+        18.1251,
+        15.9876
+      ],
+      "target": [
+        14.0351,
+        18.5099,
+        0.2497
+      ],
+      "up": [
+        0.0093,
+        0.9998,
+        0.0201
+      ],
+      "fovDegrees": 39.598,
+      "projection": "orthographic",
+      "orthoScale": 18.0
+    },
+    {
+      "id": "cottage_garden",
+      "label": "Cottage garden",
+      "sourceCamera": "Carmel \u2022 04 Cottage garden",
+      "position": [
+        -28.7553,
+        10.9493,
+        2.096
+      ],
+      "target": [
+        -25.1593,
+        4.7946,
+        -3.5139
+      ],
+      "up": [
+        -0.8891,
+        -0.1158,
+        -0.4429
+      ],
+      "fovDegrees": 39.598,
+      "projection": "orthographic",
+      "orthoScale": 11.0
+    }
+  ],
+  "notes": [
+    "Ocean depth gradient is baked to vertex colours (COLOR_0).",
+    "Collision roles and interaction markers are data, not implemented browser behavior.",
+    "Only one courier is exported. Area lights, world shader, tour animation, and Blender scripts are omitted."
+  ]
+}

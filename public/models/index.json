@@ -1,0 +1,6 @@
+{
+  "default": "carmel",
+  "models": [
+    { "id": "carmel", "title": "Carmel", "manifest": "models/carmel/manifest.json" }
+  ]
+}
