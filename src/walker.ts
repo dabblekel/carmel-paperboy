@@ -54,6 +54,8 @@ export class Walker {
   readonly timings: Record<string, number> = {};
   private swing?: { from: THREE.Vector3; to: THREE.Vector3; t: number };
   private keys = new Set<string>();
+  private touchRight = 0;
+  private touchUp = 0;
   private cursorX: number | null = null;
   private speed = 0;
   private stride = 0;
@@ -246,6 +248,12 @@ export class Walker {
     this.swing = { from: this.camHeading.clone(), to: this.facing.clone(), t: 0 };
   }
 
+  /** Screen-relative direction from the on-screen joystick (-1..1 on each axis). */
+  setTouchDirection(right: number, up: number): void {
+    this.touchRight = THREE.MathUtils.clamp(right, -1, 1);
+    this.touchUp = THREE.MathUtils.clamp(up, -1, 1);
+  }
+
   update(dt: number): void {
     dt = Math.min(Math.max(dt, 0), 0.1);
     // Substeps keep collision reliable during a slow frame.
@@ -258,8 +266,9 @@ export class Walker {
   private step(dt: number): void {
     if (!this.enabled) { this.speed = 0; return; }
     // Screen-relative input, measured against the direction the camera is looking.
-    const up = +(this.keys.has('ArrowUp') || this.keys.has('KeyW')) - +(this.keys.has('ArrowDown') || this.keys.has('KeyS'));
-    const right = +(this.keys.has('ArrowRight') || this.keys.has('KeyD')) - +(this.keys.has('ArrowLeft') || this.keys.has('KeyA'));
+    const up = +(this.keys.has('ArrowUp') || this.keys.has('KeyW')) - +(this.keys.has('ArrowDown') || this.keys.has('KeyS')) + this.touchUp;
+    const right = +(this.keys.has('ArrowRight') || this.keys.has('KeyD')) - +(this.keys.has('ArrowLeft') || this.keys.has('KeyA')) + this.touchRight;
+    const strength = Math.min(1, Math.hypot(up, right));
     const view = this.viewHeading(this.tmp2);
     const viewRight = this.tmp.copy(view).cross(this.n).normalize();
     const wish = new THREE.Vector3().addScaledVector(view, up).addScaledVector(viewRight, right);
@@ -275,7 +284,7 @@ export class Walker {
       const maxTurn = TURN_SPEED * dt;
       this.facing.applyAxisAngle(this.n, THREE.MathUtils.clamp(turn, -maxTurn, maxTurn));
       this.tangent(this.facing, this.n);
-      const distance = (running ? RUN_SPEED : WALK_SPEED) * dt;
+      const distance = (running ? RUN_SPEED : WALK_SPEED) * strength * dt;
       moved = this.tryMove(wish, distance);
     }
     this.speed = moved / Math.max(dt, 1e-6);
@@ -493,7 +502,7 @@ export class Walker {
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.keys.clear());
-    this.dom.addEventListener('pointermove', (e) => { this.cursorX = e.clientX / window.innerWidth; });
+    this.dom.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') this.cursorX = e.clientX / window.innerWidth; });
     this.dom.addEventListener('pointerleave', () => { this.cursorX = null; });
   }
 }

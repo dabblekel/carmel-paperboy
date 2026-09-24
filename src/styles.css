@@ -69,6 +69,32 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #7ea8d2; }
   pointer-events: none;
 }
 
+.touch-joystick {
+  display: none; position: fixed; left: 16px; bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 22; width: 112px; height: 112px; padding: 0;
+  border: 1.5px solid rgba(91, 66, 45, 0.48); border-radius: 50%;
+  background: rgba(251, 246, 236, 0.8); box-shadow: 0 4px 18px rgba(38, 50, 70, 0.2);
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.touch-joystick:active { cursor: grabbing; }
+.touch-joystick:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.touch-joystick-ring {
+  position: absolute; inset: 13px; border: 1px dashed rgba(91, 66, 45, 0.32);
+  border-radius: 50%; pointer-events: none;
+}
+.touch-joystick-thumb {
+  position: absolute; inset: 0; margin: auto; width: 44px; height: 44px;
+  display: grid; place-items: center; border: 1.5px solid #92533e; border-radius: 50%;
+  background: #c97759; box-shadow: 0 3px 7px rgba(74, 42, 31, 0.25); pointer-events: none;
+}
+.touch-joystick-thumb::after { content: '✦'; color: #fff8e9; font: 21px/1 ui-serif, Georgia, serif; }
+@media (any-pointer: coarse), (max-width: 640px) {
+  .touch-joystick:not([hidden]) { display: block; }
+  .walk-bar { bottom: calc(128px + env(safe-area-inset-bottom)); }
+  .walk-bar .hint { display: none; }
+}
+body:has(#map.full:not([hidden])) .touch-joystick { visibility: hidden; }
+
 .overlay { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(126, 168, 210, 0.55); }
 .overlay[hidden] { display: none; }
 .card { position: relative; width: min(420px, calc(100vw - 32px)); padding: 20px 22px; }
@@ -198,7 +224,7 @@ body.capture .panel:not(.card), body.capture .overlay { display: none !important
 @keyframes unfold { from { opacity: 0; transform: scale(0.35) rotate(-4deg); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .map-panel { animation: none; } .map-fold { transition: none; } }
 
-body.capture .tooltip, body.capture .place-card, body.capture .speech-bubble, body.capture .map-fold, body.capture .walk-bar { display: none !important; }
+body.capture .tooltip, body.capture .place-card, body.capture .speech-bubble, body.capture .map-fold, body.capture .walk-bar, body.capture .touch-joystick { display: none !important; }
 
 @media (max-width: 640px) {
 }

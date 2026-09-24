@@ -44,6 +44,10 @@ that way.
 | Space, C or **Look ahead** | Swing the camera round behind him (slowly, with easing) |
 | R | Back to the start |
 
+On a phone or touchscreen, drag the round joystick in the lower-left corner to walk in any
+direction. Moving the thumb only a little makes him walk slowly; releasing it stops him. The
+**Look ahead** button sits just above it, and the folded route map stays in the lower-right corner.
+
 The camera stays about 10 m behind and 13 m above him, as in Blender walk mode. When scenery
 hides him it rises gently to a more overhead angle, and settles back once the view is clear.
 The collision rules match Blender: houses and tree trunks block him; flowers, rocks, low planting

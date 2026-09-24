@@ -3,6 +3,7 @@ import { WorldViewer } from './viewer';
 import { Guide, type Description } from './guide';
 import type { GuideConfig } from './map';
 import type { ModelIndex } from './types';
+import { bindTouchJoystick } from './touchjoystick';
 
 const params = new URLSearchParams(window.location.search);
 const debug = params.has('debug');
@@ -18,10 +19,12 @@ const errorBox = $('#error');
 const errorText = $('#error-text');
 const viewsEl = $('#views');
 const debugEl = $('#debug');
+const touchJoystick = $<HTMLButtonElement>('#touch-joystick');
 
 if (capture) document.body.classList.add('capture');
 
 const viewer = new WorldViewer(stage);
+bindTouchJoystick(touchJoystick, () => viewer.walker);
 (window as unknown as { __viewer: unknown }).__viewer = { viewer, ready: false, error: null as string | null };
 const hook = (window as unknown as { __viewer: { ready: boolean; error: string | null; guide?: Guide } }).__viewer;
 
@@ -51,6 +54,7 @@ async function start(): Promise<void> {
       $('#view-bar').hidden = false;
     } else {
       $('#walk-bar').hidden = false;
+      touchJoystick.hidden = false;
       $('#look-ahead').addEventListener('click', () => viewer.walker?.lookAhead());
     }
     await startGuide(entry.manifest);
